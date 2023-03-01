@@ -1,5 +1,5 @@
 import random
-import sys
+import argparse
 import urllib.request
 
 def bullscows(guess: str, secret: str) -> (int, int):
@@ -42,4 +42,17 @@ def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
     return try_cnt
 
 if __name__ == '__main__':
-    pass
+    parser = argparse.ArgumentParser()
+    parser.add_argument('dict', type=str)
+    parser.add_argument('len', type=int, default=5, nargs='?')
+    args = parser.parse_args()
+
+    try:
+        words = urllib.request.urlopen(args.dict).read().decode().split()
+    except:
+        try:
+            words = open(args.dict, 'r').read().split()
+        except:
+            print(f'Wrong dictionary {args.dict}')
+    words = [word for word in words if len(word) == args.len]
+    print("Number of attempts: ", gameplay(ask, inform, words))
