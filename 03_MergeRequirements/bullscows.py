@@ -1,6 +1,7 @@
 import random
 import argparse
 import urllib.request
+from cowsay import cowsay, list_cows
 
 def bullscows(guess: str, secret: str) -> (int, int):
     bulls = 0
@@ -15,8 +16,10 @@ def bullscows(guess: str, secret: str) -> (int, int):
 
 def ask(prompt: str, valid: list[str] = None) -> str:
     while(True):
-        print(f"{prompt}")
-        inpt = input()
+        inpt = input(cowsay(
+                message=prompt,
+                cow=random.choice(list_cows()),
+        ) + '\n')
         if valid is None:
             break
         elif inpt in valid:
@@ -27,7 +30,10 @@ def ask(prompt: str, valid: list[str] = None) -> str:
     return inpt
 
 def inform(format_string: str, bulls: int, cows: int) -> None:
-    print(format_string.format(bulls, cows))
+    print( cowsay(
+            message=format_string.format(bulls, cows),
+            cow=random.choice(list_cows()),
+        ))
 
 def gameplay(ask: callable, inform: callable, words: list[str]) -> int:
     try_cnt = 0
